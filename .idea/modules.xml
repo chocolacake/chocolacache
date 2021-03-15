@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/chocolacache.iml" filepath="$PROJECT_DIR$/.idea/chocolacache.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chocolacache-api/chocolacache-api.iml" filepath="$PROJECT_DIR$/chocolacache-api/chocolacache-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chocolacache-client/chocolacache-client.iml" filepath="$PROJECT_DIR$/chocolacache-client/chocolacache-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chocolacache-common/chocolacache-common.iml" filepath="$PROJECT_DIR$/chocolacache-common/chocolacache-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chocolacache-protocol/chocolacache-protocol.iml" filepath="$PROJECT_DIR$/chocolacache-protocol/chocolacache-protocol.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chocolacache-server/chocolacache-server.iml" filepath="$PROJECT_DIR$/chocolacache-server/chocolacache-server.iml" />
+    </modules>
+  </component>
+</project>
