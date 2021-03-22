@@ -1,9 +1,11 @@
 package com.chocolacake.chocolacache.protocol;
 
+import com.chocolacake.chocolacache.protocol.command.CommandType;
 import com.chocolacake.chocolacache.protocol.decode.NettyDecoder;
 import com.chocolacake.chocolacache.protocol.encode.NettyEncoder;
 import com.chocolacake.chocolacache.protocol.exception.NettyException;
 import com.chocolacake.chocolacache.protocol.handler.CommandExecuteHandler;
+import com.chocolacake.chocolacache.protocol.handler.NettyCommandProcessor;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -24,6 +26,10 @@ public class NettyRemoteServer {
 
     public NettyRemoteServer() {
 
+    }
+
+    public void registerProcessor(CommandType commandType, NettyCommandProcessor commandProcessor) {
+        commandExecuteHandler.registerProcessor(commandType, commandProcessor);
     }
 
     public void start() {
@@ -55,6 +61,6 @@ public class NettyRemoteServer {
         } else {
 
         }
-        logger.info("Start server.......");
+        logger.info("Netty Start success.......");
     }
 }
