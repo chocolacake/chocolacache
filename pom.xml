@@ -24,6 +24,7 @@
         <common.util.verison>3.11</common.util.verison>
         <slf4j.version>1.7.20</slf4j.version>
         <logback.version>1.2.3</logback.version>
+        <jackson.version>2.11.3</jackson.version>
     </properties>
 
 
@@ -68,6 +69,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

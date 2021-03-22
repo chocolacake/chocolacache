@@ -13,5 +13,11 @@
 
     <artifactId>chocolacache-client</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.chocolacake</groupId>
+            <artifactId>chocolacache-common</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
