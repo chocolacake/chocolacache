@@ -1,8 +1,8 @@
 package com.chocolacake.chocolacache.protocol.handler;
 
+import com.chocolacake.chocolacache.common.entity.Command;
+import com.chocolacake.chocolacache.common.entity.CommandType;
 import com.chocolacake.chocolacache.common.utils.ThreadPoolUtil;
-import com.chocolacake.chocolacache.protocol.command.Command;
-import com.chocolacake.chocolacache.protocol.command.CommandType;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

@@ -1,4 +1,4 @@
-package com.chocolacake.chocolacache.protocol.command;
+package com.chocolacake.chocolacache.common.entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ public enum CommandType {
 
     GET_CACHE(1, "Get cache"),
 
-    PUT_CACHE(2, "Put cache"),
+    SET_CACHE(2, "Put cache"),
     ;
 
 
