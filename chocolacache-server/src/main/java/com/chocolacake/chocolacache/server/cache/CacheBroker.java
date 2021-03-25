@@ -1,7 +1,7 @@
 package com.chocolacake.chocolacache.server.cache;
 
 import com.chocolacake.chocolacache.protocol.NettyRemoteServer;
-import com.chocolacake.chocolacache.protocol.command.CommandType;
+import com.chocolacake.chocolacache.common.entity.CommandType;
 import com.chocolacake.chocolacache.server.processor.GetCommandProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

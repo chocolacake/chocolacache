@@ -1,6 +1,6 @@
 package com.chocolacake.chocolacache.protocol.encode;
 
-import com.chocolacake.chocolacache.protocol.command.Command;
+import com.chocolacake.chocolacache.common.entity.Command;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

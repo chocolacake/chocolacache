@@ -1,6 +1,6 @@
 package com.chocolacake.chocolacache.protocol;
 
-import com.chocolacake.chocolacache.protocol.command.CommandType;
+import com.chocolacake.chocolacache.common.entity.CommandType;
 import com.chocolacake.chocolacache.protocol.decode.NettyDecoder;
 import com.chocolacake.chocolacache.protocol.encode.NettyEncoder;
 import com.chocolacake.chocolacache.protocol.exception.NettyException;

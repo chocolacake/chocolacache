@@ -20,4 +20,8 @@ public class ChocolacacheClient {
         });
     }
 
+    public void set(String key, String value) {
+        bootStrapClient.set(key, value);
+    }
+
 }

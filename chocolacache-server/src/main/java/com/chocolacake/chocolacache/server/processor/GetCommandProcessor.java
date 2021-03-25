@@ -3,7 +3,7 @@ package com.chocolacake.chocolacache.server.processor;
 import com.chocolacake.chocolacache.common.entity.CacheEntry;
 import com.chocolacake.chocolacache.common.entity.Response;
 import com.chocolacake.chocolacache.common.utils.JsonUtil;
-import com.chocolacake.chocolacache.protocol.command.Command;
+import com.chocolacake.chocolacache.common.entity.Command;
 import com.chocolacake.chocolacache.server.cache.CacheBucket;
 import io.netty.channel.Channel;
 import org.apache.commons.lang3.StringUtils;
