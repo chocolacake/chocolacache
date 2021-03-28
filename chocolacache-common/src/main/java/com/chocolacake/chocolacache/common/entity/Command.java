@@ -19,7 +19,7 @@ public class Command implements Serializable {
     }
 
     public void setCommandVersion(int commandVersion) {
-        throw new RuntimeException("Unsupported method");
+        this.commandVersion = commandVersion;
     }
 
     public int getCommandTypeCode() {

@@ -1,6 +1,7 @@
 package com.chocolacake.chocolacache.client.client;
 
 import com.chocolacake.chocolacache.client.config.ChocolacacheConfig;
+import com.chocolacake.chocolacache.common.utils.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,12 @@ public class ChocolacacheClient {
 
 
     public <T> T get(String key) {
-        return bootStrapClient.get(key, new TypeReference<T>() {
+        return JsonUtil.deserialize(getString(key), new TypeReference<T>() {
         });
+    }
+
+    public String getString(String key) {
+        return bootStrapClient.get(key);
     }
 
     public void set(String key, String value) {

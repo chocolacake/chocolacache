@@ -1,8 +1,11 @@
 package com.chocolacake.chocolacache.protocol.handler;
 
+import com.chocolacake.chocolacache.common.config.SystemConstant;
 import com.chocolacake.chocolacache.common.entity.Command;
 import com.chocolacake.chocolacache.common.entity.CommandType;
+import com.chocolacake.chocolacache.common.entity.Response;
 import com.chocolacake.chocolacache.common.utils.ThreadPoolUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionException;
 
 /**
  * Execute specific command
@@ -22,7 +24,7 @@ public class CommandExecuteHandler extends ChannelInboundHandlerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(CommandExecuteHandler.class);
 
-    private ConcurrentHashMap<CommandType, Pair<ExecutorService, NettyCommandProcessor>> commandProcessors = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Pair<ExecutorService, NettyCommandProcessor>> commandProcessors = new ConcurrentHashMap<>();
 
 
     @Override
@@ -32,32 +34,32 @@ public class CommandExecuteHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
+        doProcess(ctx.channel(), (Command) msg);
     }
 
     public void registerProcessor(CommandType commandType, NettyCommandProcessor processor) {
-        commandProcessors.putIfAbsent(commandType, Pair.of(ThreadPoolUtil.createExecutorService(Runtime.getRuntime().availableProcessors(),
-                Runtime.getRuntime().availableProcessors(), commandType.name()), processor));
+        ExecutorService threadPool = ThreadPoolUtil.createFixThreadPool(SystemConstant.CPU_CORES, commandType.name());
+        commandProcessors.putIfAbsent(commandType.getCode(), Pair.of(threadPool, processor));
     }
 
-    private void doProcess(ChannelHandlerContext ctx, Command command) {
-        CommandType commandType = CommandType.representOf(command.getCommandTypeCode());
-        if (!commandProcessors.contains(commandType)) {
-            throw new RuntimeException("Command type is not invalid");
-        }
-        Pair<ExecutorService, NettyCommandProcessor> pair = commandProcessors.get(commandType);
-        ExecutorService executorService = pair.getLeft();
-        NettyCommandProcessor commandProcessor = pair.getRight();
+    private void doProcess(Channel channel, Command command) {
         try {
+            CommandType commandType = CommandType.representOf(command.getCommandTypeCode());
+            Pair<ExecutorService, NettyCommandProcessor> pair = commandProcessors.computeIfAbsent(commandType.getCode(), k -> {
+                throw new RuntimeException("Command type is not invalid");
+            });
+            ExecutorService executorService = pair.getLeft();
+            NettyCommandProcessor commandProcessor = pair.getRight();
             executorService.submit(() -> {
                 try {
-                    commandProcessor.process(ctx.channel(), command);
+                    commandProcessor.process(channel, command);
                 } catch (Exception ex) {
                     logger.error("Command process error.", ex);
                 }
             });
-        } catch (RejectedExecutionException ex) {
+        } catch (Exception ex) {
             logger.error("Command has been rejected", ex);
+            channel.writeAndFlush(Response.error(ex.getMessage(), 500));
         }
     }
 }
