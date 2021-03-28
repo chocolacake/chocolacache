@@ -11,7 +11,7 @@ public class NettyEncoder extends MessageToByteEncoder<Command> {
 
     @Override
     protected void encode(ChannelHandlerContext context, Command cmd, ByteBuf byteBuf) throws Exception {
-        byteBuf.writeByte(Command.VERSION);
+        byteBuf.writeByte(cmd.getCommandVersion());
         byteBuf.writeByte(cmd.getCommandTypeCode());
         writeBytes(cmd.getCommandHeader(), byteBuf);
         writeBytes(cmd.getCommandBody(), byteBuf);

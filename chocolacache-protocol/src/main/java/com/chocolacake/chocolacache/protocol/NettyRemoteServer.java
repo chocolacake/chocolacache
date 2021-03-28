@@ -3,6 +3,7 @@ package com.chocolacake.chocolacache.protocol;
 import com.chocolacake.chocolacache.common.entity.CommandType;
 import com.chocolacake.chocolacache.protocol.decode.NettyDecoder;
 import com.chocolacake.chocolacache.protocol.encode.NettyEncoder;
+import com.chocolacake.chocolacache.protocol.encode.NettyResponseEncoder;
 import com.chocolacake.chocolacache.protocol.exception.NettyException;
 import com.chocolacake.chocolacache.protocol.handler.CommandExecuteHandler;
 import com.chocolacake.chocolacache.protocol.handler.NettyCommandProcessor;
@@ -43,8 +44,9 @@ public class NettyRemoteServer {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline().addLast(new NettyEncoder());
+                        socketChannel.pipeline().addLast(new NettyResponseEncoder());
                         socketChannel.pipeline().addLast(new NettyDecoder());
-                        socketChannel.pipeline().addLast(new IdleStateHandler(0, 0, 0, TimeUnit.MILLISECONDS));
+                        socketChannel.pipeline().addLast(new IdleStateHandler(5, 5, 5, TimeUnit.SECONDS));
                         socketChannel.pipeline().addLast(commandExecuteHandler);
                     }
                 });

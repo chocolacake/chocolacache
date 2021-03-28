@@ -2,8 +2,10 @@ package com.chocolacake.chocolacache.client.client;
 
 import com.chocolacake.chocolacache.client.config.ChocolacacheConfig;
 import com.chocolacake.chocolacache.client.model.Connection;
+import com.chocolacake.chocolacache.common.entity.CacheEntry;
 import com.chocolacake.chocolacache.common.entity.Command;
 import com.chocolacake.chocolacache.common.entity.Response;
+import com.chocolacake.chocolacache.common.entity.ResponseCode;
 import com.chocolacake.chocolacache.common.factory.ClientCommandFactory;
 import com.chocolacake.chocolacache.common.utils.ByteUtil;
 import com.chocolacake.chocolacache.common.utils.JsonUtil;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 class BootStrapClient {
 
@@ -25,34 +26,42 @@ class BootStrapClient {
         this.routeClient = new RouteClient(this);
     }
 
-    public <T> T get(String key, TypeReference<T> typeReference) {
-        String value = getRemote(key);
-        return JsonUtil.deserialize(value, typeReference);
+    public String get(String key) {
+        CacheEntry cacheEntry = getRemote(key);
+        return cacheEntry.getValue();
     }
 
-    public String set(String key, String value) {
-        return setRemote(key, value);
+    public void set(String key, String value) {
+        setRemote(key, value);
     }
 
-    private String getRemote(String key) {
+    private CacheEntry getRemote(String key) {
         try {
             String serverAddress = routeClient.getServerByKey(key);
             Connection connection = new Connection(serverAddress);
             Command command = ClientCommandFactory.createGetCommand(key);
-            Response response = connection.sendRequestSync(ByteUtil.commandToByte(command));
-            return new String(response.getBody(), StandardCharsets.UTF_8);
+            Response<CacheEntry> response = JsonUtil.deserialize(connection.sendRequestSync(ByteUtil.commandToByte(command)),
+                    new TypeReference<Response<CacheEntry>>() {
+                    });
+
+            return response.getBody();
         } catch (IOException ex) {
             throw new RuntimeException("Get from remote error", ex);
         }
     }
 
-    private String setRemote(String key, String value) {
+    private void setRemote(String key, String value) {
         try {
             String serverAddress = routeClient.getServerByKey(key);
             Connection connection = new Connection(serverAddress);
-            Command command = ClientCommandFactory.createSetCommand(key, value);
-            Response response = connection.sendRequestSync(ByteUtil.commandToByte(command));
-            return new String(response.getBody(), StandardCharsets.UTF_8);
+
+            Command command = ClientCommandFactory.createPutCommand(key, value);
+            Response response = JsonUtil.deserialize(connection.sendRequestSync(ByteUtil.commandToByte(command)),
+                    new TypeReference<Response>() {
+                    });
+            if (response.getCode() != ResponseCode.SUCCESS.getCode()) {
+                throw new RuntimeException("Set cache error" + response.getMsg());
+            }
         } catch (Exception ex) {
             throw new RuntimeException("Set to remote error", ex);
         }

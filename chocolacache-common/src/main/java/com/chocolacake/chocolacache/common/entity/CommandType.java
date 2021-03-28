@@ -7,7 +7,7 @@ public enum CommandType {
 
     GET_CACHE(1, "Get cache"),
 
-    SET_CACHE(2, "Put cache"),
+    PUT_CACHE(2, "Put cache"),
     ;
 
 
@@ -37,7 +37,7 @@ public enum CommandType {
     }
 
     public static CommandType representOf(Integer code) {
-        if (commandTypeMap.containsKey(code)) {
+        if (!commandTypeMap.containsKey(code)) {
             throw new RuntimeException("Command code is not invalid");
         }
         return commandTypeMap.get(code);
